@@ -5,32 +5,16 @@
 К примеру, не важно сколько килобайт места на диске вы сэкономили, или 
 насколько просто использовать ваш модуль.
 
-
-Я использую понятие «модули» в очень общем значении этого слова. Концепция
-модульности применима и к структуре проекта, и к менеджеру пакетов, и к написанию
-кода в целом(???). Я попытаюсь объяснить основную идею модульности на реальных 
-примерах.
-
-<!--
-I am using the term "modules" in the most generic sense of the word. These
-concepts can apply to your project structure, package manager or the very way 
-you write code. I'll attempt to explain these concepts a generic way then 
-provide real world examples.
--->
+Я использую понятие «модуль» в самом общем значении. Концепция модульности 
+применима как к структуре проекта, или менеджеру пакетов, так и к различным 
+способам написания программного кода. В статье я попробую объяснить идею 
+модульности на реальных примерах.
 
 
 ## [Глобальные зависимости][1]
-<!-- ## [Global Dependencies][1] -->
 
-
-Глобальные системы являются классическими, если все зависимости находятся 
-в одном месте. Из этого пулла различные приложения могут подключать необходимые 
-зависимости. 
-
-<!-- Global systems are classic where all your dependencies reside in a single
-location. Then multiple applications consume those dependencies from the same 
-pool. -->
-
+Классические глобальные системы подразумевают, что модули, от которых 
+зависимосят всех ваши проекты, хранятся в одном месте:
 
     | - modules
     | --- bear extends MODULES/animal
@@ -40,84 +24,46 @@ pool. -->
     | --- koala extends MODULES/bear
     | --- panda extends MODULES/bear
 
-Сначала такая структура кажется идеальной. It takes up the least amount of 
-file space(???) и все ваши модули расположены в подходящем месте. Все ваши 
-приложения, ссылаются на один модуль, так что если вы обновите такой модуль,
-то он обновится во всех прилоджениях сразу.
+По-началу, такая стуктура может показаться идеальной. Во-первых, все ваши модули
+хранятся в одной директории. Во-вторых, нет дублирования кода: с одной стороны, 
+это экономия места на диске, с другой, обновление любого модуля моменатально 
+попадет во все проекты, которые этот модуль используют.
 
-<!-- Upon initial consideration this structure seems ideal. It takes up the least
-amount of file space and all of your modules are located in one convenient place.
-All of your applications point to the same module so it is really easy to update
-that module across all of your projects. -->
-
-
-Именно по этому такую конструкцию часто используют... Но **в таком подходе есть 
-огромная брешь** 
-
-<!-- For these reasons this structure is commonly used... but **it is incredibly
-flawed**. -->
+Из-за этих очевидных плюсов такой подход используют очень часто. Но такой 
+подход **потрясающе порочен**.
 
 
 ### ТЕХНИЧЕСКИЕ ПРОБЛЕМЫ
-<!-- ### TECHNICAL ISSUES -->
+
+Обновление модулей происходит часто. Но об обратной совместимости обновлений или
+о хорошем версионировании нельзя говорить с уверенностью. Не будет ничего 
+удивительного, если ваше приложение сломается после очередного обновления 
+модулей. Глобальные зависимости подразумевают, что вы обновляете **все** свои 
+приложения каждый раз, когда обновляется код любого глобального модуля. 
+
+Если у вас много проектов, то обновлять их все при каждом обновлении 
+зависимостей — это ужасно. Более того, порой это физически невозможно.
 
 
-В большинстве систем обновления модулей происходят часто. Но обратная совместимость
-и хорошее версионирование не гарантируется. Обновление модулей вполне может 
-сломать все ваши приложения. Глобальные зависимости подразумевают, что вы 
-автоматически обновляете свои приложения каждый раз, когда обновляется код любого 
-глобального модуля.
+### СОЦИАЛЬНЫЕ ПРОБЛЕМЫ
 
-<!-- Updating modules, for most systems, happens frequently. Backwards compatibility
-and good versioning are not a guarantee. Updating modules will eventually break 
-your apps. Global dependencies mean you are forced to update**ALL** of your
-apps each time you update a global dependency. -->
+Проектами основанными на глобальных зависимостях сложно делиться. Зависимости 
+относятся не к самому проекту, а хранятся за его пределами, в окружении. 
+Обычно проблема с воссозданием такого окружения решается с помощью перечисления 
+действий, в readme, **or provide a switching 
+mechanism to recreate the environment in order to run the project**.
 
-
-Чтож, если у вас много проектов, поддерживать их при каждом обновлении зависимостей
-— это не просто кошмар. Часто, это еще и невозможно физически. 
-
-<!-- So unless you only have a couple of projects, keeping every project in step
-with dependency updates is a nightmare and most of the time not even physically 
-possible. -->
-
-
-### ПРОБЛЕМЫ КОММУНИКАЦИИ(?)
-<!-- ### SOCIAL ISSUES -->
-
-
-Глобальными зависимостями сложно делиться потому что они зависят от окружения, 
-которое находится за пределами проекта. Обычно проблема с воссозданием окружения 
-решается с помощью списка шагов в readme, или с помощью механизма, который 
-делает это автоматически. Без этого проект не запустить.
-
-<!-- Global dependencies are not easily shareable as they rely on an environment
-setup outside of the project. Which usually requires a project to request users
-(usually via a bulleted list of steps in a readme) or provide a switching 
-mechanism to recreate the environment in order to run the project. -->
-
-
-Еще одна проблема в том, что разработчикам в таких систамах часто приходится 
-поддерживать сразу несколько проектов. Особенно это актуально для open source
-проектов. Это не практично.
-
-<!-- For diverse teams, especially open source software teams with developers
-contributing to a diverse array of projects,**this is not practical**. -->
+Есть еще одна проблема. Из-за высокой связанности проектов, разработчикам 
+приходится поддерживать большое количество проектов одновременно. Особенно 
+актуально это в мире открытого ПО.
 
 
 ### ПРИМЕР
-<!-- ### EXAMPLE -->
 
-
-В течении года вы собираетесь разрабатывать сайты для различных клиентов. Вы
-создаете папку для каждого клиента. В каждом проекте вы используете одинаковые
-скрипты с утититами. В конце концов, вместо того, чтобы хранить эти утилиты
-внутри каждого проекта, вы вынесли их в отдельную директорию:
-
-<!-- You plan on building websites for various clients throughout the year. You
-create a project folder for each client and use the same utility scripts for 
-every project. So lazily you place those utilities in a single folder and then 
-consume it with each project: -->
+В течение года, вы собираетесь писать сайты для большого количества клиетов. 
+Для каждого нового проекта вы создаете отдельную директорию. И в каждой такой
+директории вы храните одинаковый скрипт с утилитами. В конце концов, вы 
+решаетесь вынести этот скрипт из каждого проекта в отдельную директорию:
 
     // /Users/dude/scripts/utils.js
     var utils = module.exports = {};
@@ -126,32 +72,26 @@ consume it with each project: -->
     };
 
 
-И, затем, подключили их в каждом вашем проекте:
-
-<!-- and then within each of your projects: -->
+А затем, вы подключаете его в каждом вашем проекте:
 
     // /Users/dude/projects/acme/blog.js
     var utils = require('/Users/dude/scripts/utils.js');
     var title = utils.slug('Acme Blog Post'); // acme-blog-post
 
 
-Бизнес со временем разрастается, и вот, у вас все больше и больше проектов. 
-Однажды, один из ваших клиентов напишет заголовок «Blogs - How do they work?» в своем
-блоге. После обработки slug вернет строку `blogs---how-do-they-work`. Клиент 
-пожалуется вам, и вы обновите вашу функцию:
-
-<!-- Over time business is doing well and you add more and more projects. One day a
-client enters the blog title "Blogs - How do they work?" and the slug produced 
-is`blogs- - -how-do-they-work`. They complain and you update your slug utility: -->
+Ваше дело выгорело — проектов с каждым днем становится все больше. Однажды,
+один из ваших клиентов, написал заголовок в своем блоге: «Blogs - How do they 
+work?». Увидев получившуюся ссылку `blogs---how-do-they-work`, которую 
+сгенерировала ваша функция `utils.slug`, клиент пожалуется вам. И вы исправите
+вашу функцию:
 
     utils.slug = function(str) {
       return str.toLowerCase().replace(/[^\w ]+/g, '').replace(/ +/g, '-');
     };
 
+Теперь результат выглядит более прилично: `blogs-how-do-they-work`.
 
-Теперь результат выглядит так: `blogs-how-do-they-work`.
-
-<!-- Which will produce the more desired `blogs-how-do-they-work`. -->
+<!-- TODO: Продолжить отсюда -->
 
 
 
@@ -599,12 +539,12 @@ ecosystem when creating a framework or sharing code and mindful of the package
 managers your module is aimed towards. -->
 
 
- [1]: http://dontkry.com/posts/code/modules-the-right-way.html#global-dependencies
+ [1]: #global-dependencies
 
- [2]: http://dontkry.com/posts/code/modules-the-right-way.html#flat-dependencies
+ [2]: #flat-dependencies
 
- [3]: http://dontkry.com/posts/code/modules-the-right-way.html#nested-dependencies
+ [3]: #nested-dependencies
  [4]: http://dontkry.com/posts/code/npmjs.org
  [5]: https://npmjs.org/doc/cli/npm-link.html
  [6]: https://npmjs.org/doc/cli/npm-dedupe.html
- [7]: http://dontkry.com/posts/code/modules-the-right-way.html#conclusion
+ [7]: #conclusion
