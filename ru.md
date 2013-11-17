@@ -14,7 +14,7 @@
 ## [Глобальные зависимости][1]
 
 Классические глобальные системы подразумевают, что модули, от которых 
-зависимосят всех ваши проекты, хранятся в одном месте:
+зависят все ваши проекты, хранятся в одном месте:
 
     | - modules
     | --- bear extends MODULES/animal
@@ -112,20 +112,13 @@ work?». Увидев получившуюся ссылку `blogs---how-do-they
 килобайт.
 
 
-## [Плоские зависимости][2]
-<!-- ## [Flat Dependencies][2] -->
+## [Одноуровневые зависимости][2]
 
-
-Плоская структура, или равные зависимости — это шаг в правильную сторону. Каждый
-проект имеет свои собственную директорию `modules`, так что каждый проект 
-будет обновлен только тогда, когда это будет необходимо. Проекты теперь проще
-разворачивать на других машинах, потому что пользователь может быстрее воссоздать
-окружение внутри директории проекта и запустить приложение (WAT?). 
-
-<!-- A flat structure or peer dependencies is a step towards the right way. Each
-project has its own`modules` location so each project can be updated only as
-needed. Each project is also shareable as the user can recreate the environment 
-quickly within the project folder to run the app. -->
+Одноуровневые или плоские зависимости — это шаг в верном направлении. В такой
+структуре, у каждого проекта есть своя директория `modules`. Это гарантия того, 
+что зависимости проекта обновятся только в том случае, если это действительно 
+необходимо. Начать работу над таким проектом не сложно. Окружение, необходимое
+для запуска проекта, воссоздается прямо в его директории.
 
     | - apps
     | --- grizzly extends modules/bear
@@ -141,22 +134,12 @@ quickly within the project folder to run the app. -->
     | ------- bear extends animal
     | ------- animal
 
+Одноуровневая структура работает хорошо только при небольшом количестве 
+зависимостей. Подобную систему легко реализовать: достаточно собрать зависимости
+в одну директорию внутри проекта.
 
-Простая структура зависимостей хорошо работают только для проектов с небольшим 
-количеством зависимостей. Такие структуры также легко реализуемы, потому как 
-каждый модуль расположен всего лишь на директорию глубже.
-
-<!-- Flat dependency structures only work well for projects with a small amount of
-dependencies. They are also easily accessible since every module is located just
-one folder down. -->
-
-
-Такая структура начинает разрушаться если ваше дерево зависимостей становится
-разнообразнее. Наш `grizzly` хочет есть, поэтому добавим модуль `fish`:
-
-<!-- This structure begins to break down when the module tree becomes diverse. Our
-`grizzly` needs to eat let's give him some `fish` which extends the `animal`
-module: -->
+Разрушение одноуровневой системы начинается при росте дерева зависимостей.
+Мы видим, что наш `grizzly` голоден, почему бы не дать ему немного `fish`:
 
     | - grizzly@0.1.0
     | --- modules
@@ -166,66 +149,38 @@ module: -->
 
 
 ### ТЕХНИЧЕСКИЕ ПРОБЛЕМЫ
-### TECHNICAL ISSUES
 
-Все замечательно пока `animal` не обновится до версии `0.2.0`. Разработчик `bear`
-быстро обновил свой модуль под версию `animal@0.2.0`. Вы работаете над 
-`gruzzly@0.2.0`, который теперь поддерживает `bear@0.2.0`. Но, к сожалению, 
-у разработчика `fish` нет времени на обновления.
+Все будет хорошо ровно до того момента, пока модуль `animal` не обновится 
+до версии `0.2.0`. Разрабочик `bear` активно работает над своим модулем, 
+он сразу же возьмется за обновление. Вы будете погружены в работу над своим 
+проектом `grizzly@0.2.0` когда обновление `bear@0.2.0` выйдет в свет. Но 
+у разработчика `fish` свободного времени, к сожалению, не оказалось. 
 
-<!-- Everything is golden until `animal` updates to `0.2.0`. The maintainer of 
-`bear` is active and updates to `animal@0.2.0`. You're working on 
-`grizzly@0.2.0` which now relies on `bear@0.2.0`. But unfortunately the
-maintainer of`fish` doesn't have time to update. -->
-
-
-Что делать? Оставить `bear@0.1.0` пока не обновится `fish`? У вас есть дэдлайн,
-к которому нужно подключить новые фичи из `bear@0.2.0`! Вероятно, в этом случае
-вы напишете хак, для того, чтобы заставить `fish` *приемлемо* работать.
-
-<!-- What do you do? Keep `bear@0.1.0` until the maintainer of `fish` gets time to
-update? You have a deadline that requires those features in`bear@0.2.0`! Likely
-at this point you'll be writing hacks to get`fish` to work *good enough*. -->
+Как вы поступите? Продолжите использовать `bear@0.1.0`, пока не обновится 
+`fish`? Но у вас есть дэдлайн. За определенный срок вы должны подключить 
+к своему модулю новые возможности, которые реализованы в `bear@0.2.0`. 
+Возможно, вы напишете хак, с которым модуль `fish` будет работать *достаточно
+хорошо*.
 
 
-### ПРОБЛЕМЫ КОММУНИКАЦИИ(?)
-<!-- ### SOCIAL ISSUES -->
+### СОЦИАЛЬНЫЕ ПРОБЛЕМЫ
 
+Одноуровневая структура может ломается, если какой-нибудь из модулей неожиданно 
+обновится. Это создает давление на экосистему разработчиков, заставляя их всех
+отслеживат потенциальные конфликты. Этот подход *работает* если разработчиков
+немного, и они тесно связаны между собой.
 
-Плоские модули могут сломаться если какой-нибудь из модулей неодиданно обновится.
-Для того, чтобы избежать потенциальных конфликтов в системе, опирающейся на модули,
-приходиться прилогать много усилий.(WAT?) Именно по этому, в небольших сильно связанных 
-командах, такой подход *проходит*.
-
-<!-- Flat modules can break when another unanticipated module updates. This puts
-pressure on the developer ecosystem to couple their modules together to avoid 
-these potential conflicts. Which is why small, tight knit teams with minimal 
-dependencies**get by** with this approach. -->
-
-
-Открытое ПО развивается через многообразие. Я верю, что модульная структура должна
-поощрять развязывание(??) модулей. Разработчики не должны задумываться о целой 
-экосистеме [ окружении модуля ], они должны просто создать один модуль.
-
-
-<!-- Open source software progresses through diversity. I believe a module structure
-should encourage module decoupling. Developers shouldn't have to think and keep 
-up with an entire ecosystem just to build a single module. -->
+Открытое программное обеспечение развивается благодаря многообразию решений. 
+Я верю, что модульная структура должна поощрять расцепление таких модулей. 
+Разработчики не должны быть вплетены в упряжку, которая тянет вперед огромную 
+экосистему. Работать над своими собственными модулями вполне достаточно.
 
 
 ### ПРИМЕР
-<!-- ### EXAMPLE -->
 
+Фреймворки — замечательный источник проблем с плоскими зависимостями.
 
-Фреймворки — это замечательный пример модулей, которые создают ситуацию плоской 
-зависимости(WAT?).
-
-<!-- Frameworks are a great example of modules that create peer dependent situations -->
-<!-- .   -->
-
-Создадим Acme framework: (??? Я не создавал никогда xD)
-
-<!-- Let's create an Acme framework: -->
+К примеру, создадим фреймворк Acme:
 
     var acme = module.exports = {
       config: {
@@ -237,63 +192,37 @@ up with an entire ecosystem just to build a single module. -->
     };
 
 
-Сейчас каждый плагин для Acme требует инстанса объекта Acme(WAT???).  Создадим 
-плагин:
-
-<!-- Now each Acme plugin requires an instance of the Acme object. Let's create a
-plugin: -->
-
+Каждый плагин требует инстанс нашего фреймворка. Создадим плагин:
 
     module.exports = function(acme) {
       if (acme.config.user) acme.announce.call(acme);
       else console.log('User not found');
     };
 
+Плагин не указывает Acme как собственную зависимость, но инстанс Acme необходим
+ему для работы. Это и есть плоская зависимость. 
 
-Плагин не указывает Acme как зависимость, но инстанс Acme необходим для работы
-плагина. Это плоская зависимость. 
-
-<!-- The plugin doesn't consume Acme as a dependency but the instance of Acme is
-required for the plugin to run. Therefore it is a peer dependency. -->
+Такая архитектура выглядит удобно с точки зрения автора, но она имеет ряд 
+проблем:
 
 
-Эта архитектура выглядит удобно с точки зрения автора. Но она имеет ряд проблем:
-
-<!-- This architecture seems convenient from a plugin author perspective but it has
-a couple of problems: -->
-
+*   В будущем выйдет новая версия фреймворка. Но, для того, чтобы перейти 
+    на нее, пользователю придется обновить каждый плагин, который он использует.
 
 *   В будущем выйдет новая версия фреймворка. Каждый проект может иметь только 
     одну версию Acme. Пользователю придется обновить каждый плагин для того, 
     чтобы использовать новую версию фреймворка.
 
-<!-- *   Down the road new versions of the Acme framework are released. Each project
-    can only have one version of your Acme framework installed. The user is forced 
-    to upgrade every single plugin they use in order to use the new version of your 
-    framework. -->
+*   Ваш плагин работает только с фреймворком Acme. Вам следовало бы сделать
+    код более общим. Тогда пользователи других фреймворков, или пользователи, 
+    которые вообще не используют фреймворки смогут воспользоваться вашим кодом. 
+    Нет нужды переписывать один и тот же код снова и снова для каждого нового 
+    фреймворка. 
 
+**Frameworks should encourage generic plugins.**
 
-*   Ваш плагин работает только с фреймворком Acme. Вы должни быть хорошим 
-    сторонником открытого ПО, и сделать ваш плагин общим(?). Тогда пользователи
-    других фреймворков, или пользователи, которые вообще не используют фреймворки
-    смогут воспользоваться вашим кодом. Нет нужды переписывать один и тот же код
-    снова и снова для каждого нового фреймворка. 
-
-<!-- *   Your plugin will only work with the Acme framework. You should be a good
-    open source citizen and make your plugin generic. Then users of other frameworks
-    or users who don't use a framework can consume your code. We don't need the same
-    code written over and over custom tailored to each framework. -->
-
-
-**Фреймворки должны поощрять общие плагины.**(WAT???)
-<!-- **Frameworks should encourage generic plugins.** -->
-
-
-Вот пример более общего кода, который не требует инстанса Acme, таким образом, 
-избавляется от плоской зависимости. 
-
-<!-- Here is a more generic approach that doesn't require an instance of acme thus
-removing the peer dependency: -->
+Вот пример более общего кода, который не требует инстанса Acme, избавляясь таким
+образом от плоской зависимости:
 
     // framework
     var acme = module.exports = {
@@ -311,9 +240,7 @@ removing the peer dependency: -->
       else console.log('User not found');
     };
 
-
-Теперь ваш плагин ориентирован на будущее и достубен для всех пользователей. 
-<!-- Now your plugin is future proof and available to everyone. -->
+Теперь наш плагин доступен для всех.
 
 
 ## [Вложенные зависимости][3]
