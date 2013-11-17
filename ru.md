@@ -91,45 +91,25 @@ work?». Увидев получившуюся ссылку `blogs---how-do-they
 
 Теперь результат выглядит более прилично: `blogs-how-do-they-work`.
 
-<!-- TODO: Продолжить отсюда -->
+Чтож, теперь сломан каждый проект, который использовал старый формат функции 
+`utils.slug`. Так что, кроме обновления `utils.slug`, вы так же должны обновить
+все свои проекты. Кроме того, после обновления, некоторые ссылки на страницы 
+ваших клиентов сломаются. Неприятно, не правда ли?
 
 
-
-Чтож, теперь каждый проект, который использовал старый формат slug'а сломан. 
-Вы не поймете этого, пока не возьметесь обновить какой-нибудь старый проект.
-Вероятно, вы обнаружите, что на страницах ваших клиентов теперь ошибка `404`, 
-потому что их url'ы изменились при обновлении. Забавный момент.
-
-<!-- Now every single past project that used to rely on the previous slug format is
-broken. You won't realize this until you're doing updates on a past project. You
-'ll likely find out your client's pages are now 404ing because they're URLs are 
-changing as they update. Fun times. -->
 
 
 Я уверен, что вы породумаете механизм обратной совместимости для этой 
-маленькой функции. Но нужно быть очень осторожным, изменяя любую глобальную
-зависимость. Нужно помнить о каждом проекте, который использует эту зависимость.
-Это тяжело и не практично для разработчиков, и это практически невозможно для 
-команд. 
+крошечной функции. Но нужно быть очень осторожным. Изменяя код любой глобальной
+зависимости, нужно помнить о каждом проекте, который эту зависимость использует.
+Это совершенно лишний и тяжелый для разработчиков. И это практически невозможно
+для команд.
 
-<!-- I'm sure you can think of a way to retain backwards compatibility for this
-simple one line function. But the point is, when editing a global dependency you
-must be mindful of every single project that uses it. That is difficult and 
-unnecessary for a developer and nearly impossible for a development team. -->
+**Глобальные зависимости приводят к постоянно ломающемуся коду.**
 
-
-**Глобальные зависимости приводят к сломанному коду**
-
-<!-- **Global dependencies will eventually produce broken code.** -->
-
-
-Вместо этого, вы должны вынести эту утилиты в отдельный модуль и установить его 
-локально в каждый проект. Рабочий код намного важнее, чем несколько 
-сэкономленных килобайт.
-
-Instead you should turn that utility into a module and install it locally into
-every project. Working code is far more important than saving a few kilobytes of
-file space.
+Скрипт с утилитами стоило вынести в отдельный модуль, и установить его локально
+в каждый проект. Рабочий код намного важнее, чем пара сэкономленных 
+килобайт.
 
 
 ## [Плоские зависимости][2]
