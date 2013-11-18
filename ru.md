@@ -352,31 +352,21 @@ package manager for good a reason. Те проблемы, о которых мы
 ## [Заключение][7]
 
 
-Я верю в то, что модули должны быть небольшими и несвязанными. Модули должны быть
+
+Я верю, что модули должны быть не большими и не связанными. Модули должны быть
 инкапсулированы — разработчики модулей не должны выходить за рамки собственных 
-модулей и влиять на экосистему open source. Я рассуждаю так, отталкиваясь 
+модулей, работая на всю экосистему разом. Я рассуждаю так, отталкиваясь 
 от того, насколько хорошо может развиваться проект, если создатели модулей 
-находятся вне досягаемости.
+не некоторое время перестанут над ними работать.
 
-<!-- I believe modules should try to be small and decoupled. No single or group of
-maintainers should have control over any part of an open source ecosystem; only 
-their own modules. I judge the success of an ecosystem based on how well it 
-thrives outside the reach of it's creators. -->
-
-
-Я призываю вас быть внимательными при создании структуры вашего кода. Помните
-об экосистемах когда вы создаете фреймворк, или планируете сделать ваш код 
-открытым. Помните о пакетных менеджерах, куда вы можете легко выложить ваш модуль.
-
-<!-- I encourage you to be mindful when structuring your code, mindful of the
-ecosystem when creating a framework or sharing code and mindful of the package 
-managers your module is aimed towards. -->
+Я призываю вас к внимательонсти при создании структуры вашего кода. Помните
+об экосистемах, когда вы создаете фреймворк, или планируете сделать ваш код 
+открытым. И не забывайте о менеджерах пакетов, которые абсолютно открыты 
+для ваших проектов.
 
 
  [1]: #global-dependencies
-
  [2]: #flat-dependencies
-
  [3]: #nested-dependencies
  [4]: http://dontkry.com/posts/code/npmjs.org
  [5]: https://npmjs.org/doc/cli/npm-link.html
