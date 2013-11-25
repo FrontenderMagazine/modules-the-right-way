@@ -1,3 +1,5 @@
+# Modules: The Right Way
+
 A module done "the right way" primarily means: it works. It doesn't error or run
 code in an unexpected way when you're deploying, have other developers running 
 your code or come back to update a project some time in the future. Other 
@@ -8,7 +10,7 @@ concepts can apply to your project structure, package manager or the very way
 you write code. I'll attempt to explain these concepts a generic way then 
 provide real world examples.
 
-## [Global Dependencies][1]
+## Global Dependencies
 
 Global systems are classic where all your dependencies reside in a single
 location. Then multiple applications consume those dependencies from the same 
@@ -96,7 +98,7 @@ Instead you should turn that utility into a module and install it locally into
 every project. Working code is far more important than saving a few kilobytes of
 file space.
 
-## [Flat Dependencies][2]
+## Flat Dependencies
 
 A flat structure or peer dependencies is a step towards the right way. Each
 project has its own`modules` location so each project can be updated only as
@@ -216,7 +218,7 @@ removing the peer dependency:
 
 Now your plugin is future proof and available to everyone.
 
-## [Nested Dependencies][3]
+## Nested Dependencies
 
 Nested dependencies solve the issues of global and flat systems. Each module is
 its own project. These modules are portable and encapsulated.
@@ -277,7 +279,7 @@ disappeared from the face of the earth.
 
 ### EXAMPLE
 
-[npm][4] is a fine example of nested dependencies and is hailed as the greatest
+[npm][1] is a fine example of nested dependencies and is hailed as the greatest
 package manager for good a reason. It has thought about and solved all of the 
 above issues.
 
@@ -295,11 +297,11 @@ wrong way.
     Use `npm link` in the project you're developing and 
     `npm link <package>` to link the development package into your
     project.
-   [][5]<https://npmjs.org/doc/cli/npm-link.html> 
+   [][2]<https://npmjs.org/doc/cli/npm-link.html> 
 *   **Duplication?**  
     Use `npm dedupe` which will intelligently reduce the duplication in your
     package tree by moving common semver compatible dependencies up.
-   [][6]<https://npmjs.org/doc/cli/npm-dedupe.html> 
+   [][3]<https://npmjs.org/doc/cli/npm-dedupe.html> 
 *   **License/Issue Resolution?**  
     npm has a page for each package listing the license, repo, homepage and
     bugs (as configured by the author
@@ -309,7 +311,7 @@ The best part is if you still don't agree npm is the right for you; it has a
 great API. Rather than starting from scratch just extend npm through it's API 
 and add the features you need.
 
-## [Conclusion][7]
+## Conclusion
 
 I believe modules should try to be small and decoupled. No single or group of
 maintainers should have control over any part of an open source ecosystem; only 
@@ -321,12 +323,6 @@ ecosystem when creating a framework or sharing code and mindful of the package
 managers your module is aimed towards.
 
 
- [1]: http://dontkry.com/posts/code/modules-the-right-way.html#global-dependencies
-
- [2]: http://dontkry.com/posts/code/modules-the-right-way.html#flat-dependencies
-
- [3]: http://dontkry.com/posts/code/modules-the-right-way.html#nested-dependencies
- [4]: http://dontkry.com/posts/code/npmjs.org
- [5]: https://npmjs.org/doc/cli/npm-link.html
- [6]: https://npmjs.org/doc/cli/npm-dedupe.html
- [7]: http://dontkry.com/posts/code/modules-the-right-way.html#conclusion
+ [1]: http://dontkry.com/posts/code/npmjs.org
+ [2]: https://npmjs.org/doc/cli/npm-link.html
+ [3]: https://npmjs.org/doc/cli/npm-dedupe.html
