@@ -361,6 +361,6 @@ above issues.
 для ваших проектов.
 
 
- [1]: http://dontkry.com/posts/code/npmjs.org
- [2]: https://npmjs.org/doc/cli/npm-link.html
- [3]: https://npmjs.org/doc/cli/npm-dedupe.html
+[1]: http://dontkry.com/posts/code/npmjs.org
+[2]: https://npmjs.org/doc/cli/npm-link.html
+[3]: https://npmjs.org/doc/cli/npm-dedupe.html
