@@ -307,10 +307,6 @@ work?». Увидев получившуюся ссылку `blogs---how-do-they
 
 ### Примеры
 
-[npm][1] is a fine example of nested dependencies and is hailed as the greatest
-package manager for good a reason. It has thought about and solved all of the 
-above issues.
-
 Хороший пример многоуровневых зависимостей — [npm][1]. Его считают лучшим пакетным 
 менеджером не без причины. В нем предложено решение всех упомянутых выше проблем.
 
